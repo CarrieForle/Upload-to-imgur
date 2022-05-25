@@ -1,2 +1,2 @@
-# Upload_to_imgur
+# Upload to imgur
 Upload picture to imgur.com
