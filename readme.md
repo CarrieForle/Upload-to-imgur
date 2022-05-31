@@ -14,7 +14,7 @@ A simple Java program to upload pictures to Imgur with their native API.
 
 The application is built under `JDK 17.0.3`, but `JDK 9+` should be fine. (Not tested)
 
-    javac src\module-info.java src\Main.java
+    javac -d out src\module-info.java src\Main.java
     jar -c -v -f build\main.jar -e com.carrieforle.uploadtoimgur.Main -C out .
 
 To execute the jar

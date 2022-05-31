@@ -23,10 +23,6 @@ public class Main
 {
     public final static String CLIENT_ID = "f88334fd9f04f92";
     
-    enum PATH {obj}
-    enum SRC_HTML {obj}
-    enum BINARY {obj}
-    
     public static void main(String[] args)
     {
         try
@@ -38,17 +34,17 @@ public class Main
                 
                 if(clipboard.isDataFlavorAvailable(new DataFlavor("text/html")))
                 {
-                    data = getFromClipboard(clipboard, SRC_HTML.obj);
+                    data = getFromClipboardHTML(clipboard);
                 }
                 
                 else if(clipboard.isDataFlavorAvailable(DataFlavor.imageFlavor))
                 {
-                    data = getFromClipboard(clipboard, BINARY.obj);
+                    data = getFromClipboardBINARY(clipboard);
                 }
                 
                 else if(clipboard.isDataFlavorAvailable(new DataFlavor("application/x-java-file-list; class=java.util.List")))
                 {
-                    args = getFromClipboard(clipboard, PATH.obj);
+                    args = getFromClipboardPATH(clipboard);
                 }
                 
                 else
@@ -174,7 +170,7 @@ public class Main
         }
     }
     
-    public static byte[] getFromClipboard(Clipboard clipboard, SRC_HTML s) throws IOException, ClassNotFoundException, UnsupportedFlavorException
+    public static byte[] getFromClipboardHTML(Clipboard clipboard) throws IOException, ClassNotFoundException, UnsupportedFlavorException
     {
         var flavor = new DataFlavor("text/html");
 
@@ -191,7 +187,7 @@ public class Main
         }
     }
     
-    public static byte[] getFromClipboard(Clipboard clipboard, BINARY b) throws IOException, ClassNotFoundException, UnsupportedFlavorException
+    public static byte[] getFromClipboardBINARY(Clipboard clipboard) throws IOException, ClassNotFoundException, UnsupportedFlavorException
     {
         var flavor = DataFlavor.imageFlavor;
         RenderedImage data = (RenderedImage)clipboard.getData(flavor);
@@ -203,7 +199,7 @@ public class Main
         }
     }
     
-    public static String[] getFromClipboard(Clipboard clipboard, PATH p) throws IOException, ClassNotFoundException, UnsupportedFlavorException
+    public static String[] getFromClipboardPATH(Clipboard clipboard) throws IOException, ClassNotFoundException, UnsupportedFlavorException
     {
         var flavor = new DataFlavor("application/x-java-file-list; class=java.util.List");
         List<?> datas = (List<?>)clipboard.getData(flavor);
