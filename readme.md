@@ -23,6 +23,6 @@ To execute the jar
     
 ## jlink
 
-The following snippets create a JRE to run in `jre`. (45.5MB)
+The following snippets create a JRE to run in `jre/`. (45.5MB)
 
     jlink -v --compress=2 -p out --add-modules uploadtoimgur --output jre
