@@ -26,3 +26,9 @@ To execute the jar
 The following snippets create a JRE to run in `jre/`. (45.5MB)
 
     jlink -v --compress=2 -p out --add-modules uploadtoimgur --output jre
+
+# Note
+
+If jar does not open console on Windows, create a `batch` snippet with the following
+
+    java -jar build\main.jar %*
