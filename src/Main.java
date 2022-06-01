@@ -60,8 +60,11 @@ public class Main
                     // Uploading too fast
                     if(httpR_response.statusCode() == 429)
                     {
-                        System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
-                        System.in.read();
+                        if(System.console() != null)
+                        {
+                            System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
+                            System.in.read();
+                        }
                         return;
                     }
                     
@@ -75,7 +78,7 @@ public class Main
                     String link = extractFrom(response, "link")[0];
                     String[] additional_links = null;
                     
-                    if(link.substring(link.length()-3).equals("gif"))
+                    if(System.console() != null && link.substring(link.length()-3).equals("gif"))
                     {
                         additional_links = extractFrom(response, "mp4", "gifv", "hls");
                         System.out.format("Link: %s\n\n", link);
@@ -100,8 +103,11 @@ public class Main
                 HttpResponse<String> httpR_response = uploadToImgur(path);
                 if(httpR_response.statusCode() == 429)
                 {
-                    System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
-                    System.in.read();
+                    if(System.console() != null)
+                    {
+                        System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
+                        System.in.read();
+                    }
                     return;
                 }
                 
@@ -117,12 +123,12 @@ public class Main
                 String link = extractFrom(response, "link")[0];
                 String[] additional_links = null;
                 
-                if(args.length > 1)
+                if(System.console() != null && args.length > 1)
                 {
                     System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\')+1), link);
                 }
                 
-                if(link.substring(link.length()-3).equals("gif"))
+                if(System.console() != null && link.substring(link.length()-3).equals("gif"))
                 {
                     if(args.length == 1)
                     {
@@ -151,7 +157,7 @@ public class Main
                 }
                 
             }
-            if(args.length > 1)
+            if(System.console() != null && args.length > 1)
             {
                 System.out.println("Press Enter to exit");
                 System.in.read();
@@ -159,12 +165,19 @@ public class Main
         }
         catch(Exception e)
         {
+            if(System.console() == null)
+            {
+                return;
+            }
+            
             System.out.println(e);
             System.out.print("Failed");
+            
             try
             {
                 System.in.read();
             }
+            
             catch(Exception a)
             {}
         }
