@@ -5,7 +5,7 @@ A simple Java program to upload pictures to Imgur with their native API.
 ## Features
 
 - Fast (native API used)
-- Small (a 6KB jar, unless you don't have JRE installed)
+- Small (5.75KB, unless you don't have JRE installed)
 - Supported uploaded from
     - copied files
     - copied image data
