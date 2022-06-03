@@ -115,7 +115,7 @@ public class Main
                 {
                     if(args.length == 1) return;
                     
-                    System.out.format("%s > FAILED\n", path.substring(path.lastIndexOf('\\')+1));
+                    System.out.format("%s > FAILED\n", path.substring(path.lastIndexOf('\\') + 1));
                     continue;
                 }
                                 
@@ -125,14 +125,14 @@ public class Main
                 
                 if(System.console() != null && args.length > 1)
                 {
-                    System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\')+1), link);
+                    System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\') + 1), link);
                 }
                 
                 if(System.console() != null && link.substring(link.length()-3).equals("gif"))
                 {
                     if(args.length == 1)
                     {
-                        System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\')+1), link);
+                        System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\') + 1), link);
                     }
                     additional_links = extractFrom(response, "mp4", "gifv", "hls");
                     
@@ -163,6 +163,7 @@ public class Main
                 System.in.read();
             }
         }
+        
         catch(Exception e)
         {
             if(System.console() == null)
@@ -186,11 +187,30 @@ public class Main
     public static byte[] getFromClipboardHTML(Clipboard clipboard) throws IOException, ClassNotFoundException, UnsupportedFlavorException
     {
         var flavor = new DataFlavor("text/html");
-
         try(InputStream is_from_clipboard = (InputStream)clipboard.getData(flavor))
         {
             String str_url = new String(is_from_clipboard.readAllBytes());
-            str_url = str_url.substring(10, str_url.length()-3);
+
+            int i_start = 0;
+            
+            // If copied binary image data from a HTML
+            if(str_url.startsWith("<img "))
+            {
+                i_start = str_url.indexOf("src=\"") + 5;
+            }
+            
+            // Else if copied URL from a HTML
+            else if(str_url.startsWith("<a "))
+            {
+                i_start = str_url.indexOf("href=\"") + 6;
+            }
+            
+            else
+            {
+                throw new IOException("Image unsupported or corrupted.");
+            }
+            
+            str_url = str_url.substring(i_start, str_url.indexOf('\"', i_start));
             URL url = new URL(str_url);
             
             try(InputStream is_from_url = url.openStream())
@@ -240,10 +260,10 @@ public class Main
         
         for(int i = 0; i < words.length; i++)
         {
-            int start = str.indexOf(words[i], from_pos) + words[i].length()+3;
+            int start = str.indexOf(words[i], from_pos) + words[i].length() + 3;
             
             int end = str.indexOf('\"', start);
-            from_pos = end+2;
+            from_pos = end + 2;
             StringBuilder sb = new StringBuilder(str.substring(start, end));
             
             for(int j = 0; j < sb.length(); j++)
