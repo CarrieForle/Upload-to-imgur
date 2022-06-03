@@ -72,7 +72,6 @@ public class Main
                     {
                         return;
                     }
-                    
                         
                     String response = httpR_response.body();
                     String link = extractFrom(response, "link")[0];
