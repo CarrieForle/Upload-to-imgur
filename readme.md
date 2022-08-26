@@ -19,7 +19,7 @@ A simple Java program to upload pictures to Imgur with their native API.
 ## How to use
 
 Open the app and it will open a webpage where your media is uploaded.
-If you have multiple copied files, it will just text you the links instead.
+If you upload multiple files, it will just text you the links instead.
 
 #### Arguments
 
