@@ -1,1 +1,1 @@
-java -jar build\main.jar %*
+java -jar build\main.jar %* 

@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Main
@@ -25,9 +26,30 @@ public class Main
     
     public static void main(String[] args)
     {
+        
+        boolean openBrowser = true;
+        final boolean systemConsoleAvailable = (System.console() != null);
+        
         try
         {
-            if(args.length == 0)
+            List<Integer> paths_index = new ArrayList<>();
+            
+            // Access arguments and filter out the picture datas
+            for(int i = 0 ; i < args.length; i++)
+            {
+                if(args[i].equals("-f"))
+                {
+                    openBrowser = false;
+                }
+                
+                else
+                {
+                    paths_index.add(i);
+                }
+            }
+            final int ps = paths_index.size();
+            
+            if(ps == 0)
             {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 byte[] data = null;
@@ -45,6 +67,10 @@ public class Main
                 else if(clipboard.isDataFlavorAvailable(new DataFlavor("application/x-java-file-list; class=java.util.List")))
                 {
                     args = getFromClipboardPATH(clipboard);
+                    for(int i = 0; i < args.length; i++)
+                    {
+                        paths_index.add(i);
+                    }
                 }
                 
                 else
@@ -60,7 +86,7 @@ public class Main
                     // Uploading too fast
                     if(httpR_response.statusCode() == 429)
                     {
-                        if(System.console() != null)
+                        if(systemConsoleAvailable)
                         {
                             System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
                             System.in.read();
@@ -77,32 +103,36 @@ public class Main
                     String link = extractFrom(response, "link")[0];
                     String[] additional_links = null;
                     
-                    if(System.console() != null && link.substring(link.length()-3).equals("gif"))
+                    if(systemConsoleAvailable && link.substring(link.length()-3).equals("gif"))
                     {
                         additional_links = extractFrom(response, "mp4", "gifv", "hls");
+                        
                         System.out.format("Link: %s\n\n", link);
                         for(String addi_link : additional_links)
                         {
                             System.out.println(addi_link);
                         }
-                        System.out.print("\n\nPress Enter to exit");
-                        System.in.read();
                     }
                     
-                    else
+                    else if(openBrowser)
                     {
                         goToWebsite(link);
                         return;
                     }
+                    
+                    else if(systemConsoleAvailable)
+                    {
+                        System.out.println(link);
+                    }
                 }
             }
             
-            for(String path : args)
+            for(int i : paths_index)
             {
-                HttpResponse<String> httpR_response = uploadToImgur(path);
+                HttpResponse<String> httpR_response = uploadToImgur(args[i]);
                 if(httpR_response.statusCode() == 429)
                 {
-                    if(System.console() != null)
+                    if(systemConsoleAvailable)
                     {
                         System.out.println("You're uploading too fast. Please have a coffee and wait patiently for 2 minutes.");
                         System.in.read();
@@ -112,27 +142,35 @@ public class Main
                 
                 else if(httpR_response.statusCode() != 200)
                 {
-                    if(args.length == 1) return;
+                    if(ps == 1) return;
                     
-                    System.out.format("%s > FAILED\n", path.substring(path.lastIndexOf('\\') + 1));
+                    System.out.format("%s > FAILED\n", args[i].substring(args[i].lastIndexOf('\\')+1));
                     continue;
                 }
                                 
                 String response = httpR_response.body();
                 String link = extractFrom(response, "link")[0];
                 String[] additional_links = null;
+                boolean is_gif = link.substring(link.length()-3).equals("gif");
                 
-                if(System.console() != null && args.length > 1)
+                if(systemConsoleAvailable && (ps > 1 || is_gif))
                 {
-                    System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\') + 1), link);
+                    System.out.format("%s > %s\n", args[i].substring(args[i].lastIndexOf('\\')+1), link);
                 }
                 
-                if(System.console() != null && link.substring(link.length()-3).equals("gif"))
+                else if(openBrowser && (ps == 1 || !systemConsoleAvailable))
                 {
-                    if(args.length == 1)
-                    {
-                        System.out.format("%s > %s\n", path.substring(path.lastIndexOf('\\') + 1), link);
-                    }
+                    goToWebsite(link);
+                    return;
+                }
+                
+                else if(systemConsoleAvailable)
+                {
+                    System.out.println(link);
+                }
+                
+                if(systemConsoleAvailable && is_gif)
+                {
                     additional_links = extractFrom(response, "mp4", "gifv", "hls");
                     
                     System.out.println();
@@ -141,31 +179,19 @@ public class Main
                         System.out.println(addi_link);
                     }
                     System.out.println();
-                    
-                    if(args.length == 1)
-                    {
-                        System.out.println("Press Enter to exit");
-                        System.in.read();
-                    }
                 }
-                
-                else if(args.length == 1)
-                {
-                    goToWebsite(link);
-                    return;
-                }
-                
             }
-            if(System.console() != null && args.length > 1)
+            
+            if(systemConsoleAvailable && (!openBrowser || ps > 1))
             {
-                System.out.println("Press Enter to exit");
+                System.out.print("\nPress Enter to exit");
                 System.in.read();
             }
         }
         
         catch(Exception e)
         {
-            if(System.console() == null)
+            if(!systemConsoleAvailable)
             {
                 return;
             }
