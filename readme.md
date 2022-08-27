@@ -1,6 +1,6 @@
 # Upload to Imgur
 
-A console program to upload pictures to Imgur.
+A console program to upload medias to Imgur.
 
 ## Features
 
