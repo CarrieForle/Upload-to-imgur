@@ -1,10 +1,10 @@
 # Upload to Imgur
 
-A simple Java program to upload pictures to Imgur with their native API.
+A console program to upload pictures to Imgur.
 
 ## Features
 
-- Use [native API](https://apidocs.imgur.com/)
+- Use [official API](https://apidocs.imgur.com/)
 - Supported uploading pictures from
     - copied files
     - copied image data
