@@ -4,7 +4,7 @@ A console program to upload pictures to Imgur.
 
 ## Features
 
-- Use [official API](https://apidocs.imgur.com/)
+- Use [the official API](https://apidocs.imgur.com/)
 - Supported uploading pictures from
     - copied files
     - copied image data
