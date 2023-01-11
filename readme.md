@@ -23,17 +23,17 @@ If you upload multiple files, it will just text you the links instead.
 
 #### Arguments
 
-`-f`: do not open browswer and text links instead
+`-f`: do not open browswer and print links instead
 
 ## Build (create a jar)
 
-The application is built and executed under [JDK Eclipse Termurim 17.0.4](https://adoptium.net/temurin/releases), 
+The application was built and executed under [JDK Eclipse Termurim 17.0.4](https://adoptium.net/temurin/releases), 
 but JDK 12+ (JRE 12+ for execution) should work as well. (Not tested)
 
     javac -d out src\*
     jar -c -v -f build\main.jar -e com.carrieforle.uploadtoimgur.Main -C out .
 
-To execute the jar
+Run the jar executable
 
     java -jar build\main.jar
     
