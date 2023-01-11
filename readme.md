@@ -45,6 +45,6 @@ The following snippets create a JRE to run in `jre/`. (45.5MB)
 
 ## Note
 
-If the jar does not open a console on Windows, create a `batch` snippet with the following
+If the console is not opened upon opening it on Windows, create a `batch` snippet with the following text
 
     java -jar build\main.jar %*
