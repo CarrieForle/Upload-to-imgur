@@ -8,7 +8,7 @@ A console program to upload medias to Imgur.
 - Supported uploading pictures from
     - copied files
     - copied image data
-    - drag and drop (required to run in batch on Windows 10)
+    - drag and drop (required to run in a batch script on Windows 10)
     
 ## Supported formats
 
